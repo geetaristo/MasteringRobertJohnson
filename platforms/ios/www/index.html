@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Mastering Robert Johnson</title>
+        <link type="text/css" rel="stylesheet" href="css/bootstrap.4.0.0.min.css"/>
+        <link type="text/css" rel="stylesheet" href="css/bootstrap.4.0.0.min.css"/>
+        <script defer src="css/fontawesome.5.0.8.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="css/rjstyle.css"/>
+
+    </head>
+    <body>
+        <script type="text/javascript" src="cordova.js"></script>
+        <div id="app">
+
+          <div class="header" style="background-color:black">
+            <h1>
+               <span v-show="!showMenu" class="hamburger" @click="expandMenu">
+               <span class="fas fa-bars"> </span>
+               </span>
+
+               <span v-show="showMenu" class="hamburger" @click="expandMenu">
+               <span class="fas fa-window-close"> </span>
+               </span>
+
+            </h1>
+            <transition name="slide">
+            <div v-if="showMenu" class="menu">
+             <ul>
+             <li>
+               <span class="menuHeader"> Sort By </span>
+             </li>
+
+             <li @click="sortByFavorites">
+               <span v-show="sort === 'favoriteUp' || sort ==='favoriteDown'" > <span id="favoriteUp" class="fas fa-check"> </span> </span>
+               Favorites
+               <span v-show="sort !== 'favoriteUp'" ><span id="favoriteUp" class="far fa-heart sortIcon"> </span> </span>
+               <span v-show="sort === 'favoriteUp'"><span id="favoriteDown" class="favorited fas fa-heart sortIcon" > </span> </span>
+             </li>
+
+             <li @click="sortTitle">
+               <span v-show="sort === 'titleUp' || sort ==='titleDown'" > <span id="titleUp" class="fas fa-check"> </span> </span>
+               Title
+               <span v-show="sort !== 'titleUp'" ><span id="titleUp" class="fas fa-sort-alpha-up sortIcon"> </span> </span>
+               <span v-show="sort === 'titleUp'"><span id="titleDown" class="fas fa-sort-alpha-down sortIcon" > </span> </span>
+             </li>
+
+             <li @click="sortTimesPlayed">
+               <span v-show="sort === 'playedUp' || sort ==='playedDown'" > <span id="titleUp" class="fas fa-check"> </span> </span>
+               Times Played
+               <span v-show="sort !== 'playedUp'" ><span id="playedUp" class="fas fa-sort-numeric-up sortIcon"> </span> </span>
+               <span v-show="sort === 'playedUp'" ><span id="playedDown" class="fas fa-sort-numeric-down sortIcon" > </span> </span>
+             </li>
+
+             <li @click="sortDatePlayed">
+               <span v-show="sort === 'dateUp' || sort ==='dateDown'" > <span id="titleUp" class="fas fa-check"> </span> </span>
+               Date Played
+               <span v-show="sort !== 'dateDown'" ><span id="dateUp" class="fas fa-calendar-alt sortIcon"> </span> </span>
+               <span v-show="sort === 'dateDown'" ><span id="dateDown" class="fas fa-calendar-alt sortIcon dateDown" > </span> </span>
+             </li>
+             <li> ____________</li>
+             <li @click="expandSongs">
+               <span>
+                 <span v-show="allAreClosed"> Open All <span class="eye sortIcon"> <span class="fas fa-eye"> </span> </span> </span>
+                 <span v-show="!allAreClosed"> Close All <span class="eye sortIcon"> <span class="fas fa-eye-slash"> </span> </span> </span>
+               </span>
+             </li>
+             </ul>
+            </div>
+            </transition>
+          </div>
+
+          <b-container v-if="!showLyrics">
+              <b-row v-for="song, idx in rjsongs" :key="song.title">
+                <div @click="toggleSong(song.title)" class="songTitle" :class="classForSong(song.title)">
+                  <span>
+                    <span v-show="song.played > 49" class="virtuosoStar"> <span id="virtuosoStar" class="fas fa-star" style="color:yellow;"> </span> </span>
+                    <span v-show="song.favorite && !song.expanded" class="favorited"> <span id="favHeart" class="fas fa-heart"> </span> </span>
+                    {{song.title}} <span class="sortFieldValue" v-html="sortFieldValue(song)"> {{sortFieldValue(song)}} </span>
+                    <span v-show="song.expanded" class="controlCarat"> <span id="angleUp" class="fas fa-angle-up" > </span> </span>
+                    <span v-show="!song.expanded" class="controlCarat"> <span id="angleDown" class="fas fa-angle-down" /> </span> </span>
+                  </span>
+                </div>
+                <transition name="slide fade">
+                <div v-if="song.expanded" class="songDetails">
+                  <p class="song-details">
+                    <span v-show="!song.favorite" class="favorite" @click="favoritize(song.title)"> <span class="far fa-heart" > </span></span>
+                    <span v-show="song.favorite" class="favorite favorited" @click="favoritize(song.title)"> <span class="fas fa-heart" > </span></span>
+                    Played {{ song.played }} times <br />
+                    <span v-html="mostRecentDetails(song)"> {{ mostRecentDetails(song) }} </span> <br />
+                  </p>
+
+                  <b-button variant="outline-secondary" @click="played(song.title)">I Played It!</b-button>
+                  <b-button variant="outline-secondary" @click="selectLyrics(song.title)">Show Lyrics</b-button>
+                </div>
+                </transition>
+              </b-row>
+          </b-container>
+
+          <transition name="bounce">
+          <div v-if="showLyrics" class="songLyrics">
+            <h2> {{selectedTitle}} <b-button @click="showLyrics = false" style="float:right;"> <span class="fas fa-window-close"> </span> </b-button> </h2>
+            <span v-for="(line,idx) in selectedLyrics" :key="line + idx">
+              {{line}} <br />
+            </span>
+            <br />
+          </div>
+          </transition>
+        </div>
+
+        <!-- original javascript resources
+         https://unpkg.com/vue
+         https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"]
+         https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js
+        -->
+        <script src="lib/vue.2.5.16.js" > </script>
+        <script src="lib/babel-polyfill.6.26.0.min.js"></script>
+        <script src="lib/bootstrap-vue.2.0.0-rc2.js"></script>
+
+        <script src="script/rjData.js"> </script>
+        <script src="script/rjUtil.js"> </script>
+        <script src="script/appMain.js"></script>
+
+    </body>
+</html>

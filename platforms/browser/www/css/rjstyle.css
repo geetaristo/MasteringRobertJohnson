@@ -1,0 +1,38 @@
+body {font-family: 'Arial', sans-serif; }
+h1 { margin-bottom:0px; }
+ul { padding-left:none; }
+ul li { list-style: none; margin-left:none; }
+.header {width: 100%; text-align:center; background-color:black; color: white; padding-bottom:10px; background: url('../images/stylin.jpg') no-repeat; height:250px;}
+.hamburger {float:right; margin-right:3px; background-color:black; padding:2px;}
+.songTitle{ width: 100%; text-align:left; border-top: 1px solid; padding: 13px; font-size: 1em; z-index:500;}
+.controlCarat { float:right; margin-right:10px; }
+.fade-enter-active, .fade-leave-active { transition: opacity .5s; }
+.fade-enter, .fade-leave-to { opacity: 0; }
+.slide-enter-active { animation: slide-in .4s; }
+.slide-leave-active {  animation: slide-in .4s reverse;}
+@keyframes slide-in { 0% { transform: translateY(-100%) } 100% { transform: translateY(0) } }
+.bounce-enter-active { animation: bounce-in .5s; }
+.bounce-leave-active {  animation: bounce-in .5s reverse;}
+@keyframes bounce-in { 0% { transform: scale(0) } 50% {transform: scale(1.05)} 100% { transform: scale(1) } }
+.realGood { background-color: #4caf50; color: white; }
+.prettyGood { background-color: #2196f3; color: white; }
+.started {background-color: #fff068; color: black; }
+.neverPlayed {background-color: white; color: black;}
+.mastered {background-color: black; color: white; }
+.virtuoso {background-color: black; color: white; }
+.virtuosoStar { color: yellow; margin-right:10px; }
+.songDetails {text-align: center; width:100%; padding:5px; padding-bottom:10px; z-index:1;}
+.menu { position: absolute; background: black; font-size: 2em; color: white; text-align: left; z-index: 1000;
+  width: 88%; min-height: 254px; padding-top: 7px; box-shadow: 4px 4px grey; border-radius: 0px 0px 7px 0px;
+  margin-left: -4px; margin-top: -4px; }
+.menuHeader { text-decoration:underline; }
+.sortIcon {float: right; margin-right:10px;}
+.eye {margin-left: 10px; margin-top: 4px; color: black; background-color: white; border-radius: 30px;}
+.sortFieldValue {font-size: .6em; font-style:italic; white-space:nowrap;}
+.dateDown {transform: rotate(180deg);}
+.songLyrics { position: absolute; top: 0px; left: 0px; min-width: 320px; width: 100%; min-height: 400px; background-color:white;
+  z-index: 99999999999; padding: 5px; }
+
+
+.favorite { font-size: 1.5em; float:left; }
+.favorited { color: red;}
